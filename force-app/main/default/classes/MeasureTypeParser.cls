@@ -18,8 +18,7 @@ public with sharing class MeasureTypeParser {
             return null;
         }
 
-        // Limit of 3: everything after the second colon stays in the label.
-        List<String> parts = token.split(':', 3);
+        List<String> parts = token.split(':');
         if (parts.size() < 3) {
             return null;
         }
@@ -27,7 +26,7 @@ public with sharing class MeasureTypeParser {
         ParsedType result   = new ParsedType();
         result.category     = parts[0].trim();
         result.subcategory  = parts[1].trim();
-        result.label        = parts[2].trim();
+        result.label        = parts[parts.size() - 1].trim();
         return result;
     }
 }
