@@ -1,0 +1,19 @@
+<template>
+    <lightning-input
+        type="search"
+        label="Find a measure"
+        onchange={handleSearch}
+    ></lightning-input>
+
+    <template if:true={errorMessage}>
+        <div class="slds-text-color_error" role="alert">{errorMessage}</div>
+    </template>
+
+    <template if:true={hasResults}>
+        <ul>
+            <template for:each={results} for:item="measure">
+                <li key={measure.Id}>{measure.Name}</li>
+            </template>
+        </ul>
+    </template>
+</template>
