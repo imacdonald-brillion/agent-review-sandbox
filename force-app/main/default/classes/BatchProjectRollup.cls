@@ -45,16 +45,18 @@ public with sharing class BatchProjectRollup
             }
         }
 
-        // Partial-success update: one bad record must not abort the whole scope,
-        // and every failure must be recorded rather than thrown.
-        List<Database.SaveResult> results = Database.update(toUpdate, false);
-        for (Integer i = 0; i < results.size(); i++) {
-            if (!results[i].isSuccess()) {
-                for (Database.Error err : results[i].getErrors()) {
-                    errors.add(toUpdate[i].Id + ': ' + err.getMessage());
-                }
-            }
+        update toUpdate;
+
+        // Audit trail: record which projects were touched by this run.
+        List<Rollup_Audit__c> audits = new List<Rollup_Audit__c>();
+        for (Project__c p : toUpdate) {
+            audits.add(new Rollup_Audit__c(
+                Project__c   = p.Id,
+                New_Total__c = p.Total_Incentive__c,
+                Run_At__c    = System.now()
+            ));
         }
+        insert audits;
     }
 
     public void finish(Database.BatchableContext ctx) {
