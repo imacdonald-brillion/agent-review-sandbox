@@ -29,3 +29,23 @@ docs/
 
 There is no org attached and no build. This repo exists to be read and
 reviewed, not deployed.
+
+## Running the Apex tests
+
+The repo includes the custom object metadata it references, so it deploys to
+any empty scratch org:
+
+```bash
+sf project deploy start --source-dir force-app --target-org <alias>
+sf apex run test --target-org <alias> \
+    --tests MeasureTypeParserTest --tests MeasureValidatorTest \
+    --result-format human --code-coverage
+```
+
+`main` is green: 6 tests, 100% pass. Deploying a defect branch and re-running
+turns the relevant test red — `bugfix/measure-type-trailing-segment` breaks
+`MeasureTypeParserTest.labelMayContainSeparator`, which is the regression that
+PR's description claims does not exist.
+
+Use an **empty** scratch org. An org with a real managed package installed may
+already define objects named `Project__c` or `Measure__c`.
