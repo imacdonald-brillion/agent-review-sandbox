@@ -30,4 +30,11 @@ private class MeasureTypeParserTest {
     static void returnsNullForTooFewSegments() {
         System.assertEquals(null, MeasureTypeParser.parse('HVAC:Cooling'), 'Two segments is not a valid token');
     }
+
+    @IsTest
+    static void handlesFourSegmentToken() {
+        MeasureTypeParser.ParsedType r = MeasureTypeParser.parse('HVAC:Cooling:Rebate:Tier 2');
+        System.assertNotEquals(null, r);
+        System.assertEquals('HVAC', r.category);
+    }
 }
