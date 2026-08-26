@@ -10,11 +10,8 @@ public with sharing class MeasureTriggerHandler {
     public static void beforeInsert(List<Measure__c> newMeasures) {
         try {
             MeasureValidator.validate(newMeasures);
-        } catch (MeasureValidator.ValidationException e) {
-            // Actionable, user-facing message -- surface verbatim.
-            addErrorToAll(newMeasures, e.getMessage());
         } catch (Exception e) {
-            // Unexpected (NPE / query / limit) -- normalize for the user.
+            ErrorLog.record('MeasureTriggerHandler.beforeInsert', e);
             addErrorToAll(newMeasures, parseSaveError(e));
         }
     }
