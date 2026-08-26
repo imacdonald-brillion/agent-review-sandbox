@@ -3,7 +3,7 @@ private class MeasureValidatorTest {
 
     @IsTest
     static void rejectsNegativeIncentive() {
-        Measure__c m = new Measure__c(Incentive__c = -5, Program__c = fakeId());
+        Measure__c m = new Measure__c(Incentive__c = -5, Program__c = 'MA26ES');
         try {
             MeasureValidator.validate(new List<Measure__c>{ m });
             System.assert(false, 'Expected a ValidationException for a negative incentive');
@@ -18,12 +18,8 @@ private class MeasureValidatorTest {
 
     @IsTest
     static void acceptsZeroIncentive() {
-        Measure__c m = new Measure__c(Incentive__c = 0, Program__c = fakeId());
+        Measure__c m = new Measure__c(Incentive__c = 0, Program__c = 'MA26ES');
         MeasureValidator.validate(new List<Measure__c>{ m });
         System.assert(true, 'Zero is a valid incentive and must not throw');
-    }
-
-    private static Id fakeId() {
-        return Id.valueOf('a005g000004ZZZZAA2');
     }
 }
